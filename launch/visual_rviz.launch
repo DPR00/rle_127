@@ -1,0 +1,36 @@
+<launch>
+  <!-- Setup the arguments -->
+  <arg name="robot_model" default="solo" doc="name of the urdf file without extension."/>
+  <param name="reference_frame" value="map"/>
+
+  <arg name="frame" value="map"/>
+  <arg name="child_frame" value="base_link"/>
+  <!-- Simple hack to make the robot name in the package name -->
+  <arg name="dollar" value="$" />
+  <arg name="xacro_path"
+      value="(find rle_127)/xacro/$(arg robot_model).urdf.xacro" />
+  <arg name="rviz_path"
+      value="(find rle_127)/rviz/display.rviz" />
+
+  <!-- Setup the urdf model as parameter -->
+  <param name="robot_description"
+      command="$(find xacro)/xacro '$(arg dollar)$(arg xacro_path)' " />
+
+  <!-- Export the configuration vector   
+  <node pkg="joint_state_publisher" type="joint_state_publisher"
+        name="joint_state_publisher" required="true">
+  </node>
+  <arg name="gui" default="True" />-->
+  <node name="robot_pose_publisher" pkg="rle_127" type="robot_pose_publisher" args="_frame:=$(arg frame) _child_frame:=$(arg child_frame)">
+  </node>
+  <!-- Export the state of the robot from its configuration vector-->
+	<node pkg="robot_state_publisher" type="robot_state_publisher"
+        name="robot_state_publisher" required="true">
+  </node>
+
+  <!-- Launch rviz with the preconfigured environment. One can setup an
+       environment super easily using the rviz graphical interface and save
+       the configuration somewhere. -->
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(arg dollar)$(arg rviz_path)" required="true" />
+  <node name="floor_publisher" pkg="rle_127" type="floor_publisher" respawn="false"/>
+</launch>

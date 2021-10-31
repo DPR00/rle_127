@@ -1,0 +1,119 @@
+#!/usr/bin/env python
+
+import rospy
+from sensor_msgs.msg import JointState
+from markers import *
+from functions2 import *
+
+
+rospy.init_node("test_ikine")
+pub = rospy.Publisher('joint_states', JointState, queue_size=1000)
+
+# Marcador para la pata 1
+bmarker1      = BallMarker(color['RED'])
+bmarker_des1  = BallMarker(color['GREEN'])
+# Marcador para la pata 2
+bmarker2      = BallMarker(color['RED'])
+bmarker_des2  = BallMarker(color['GREEN'])
+# Marcador para la pata 3
+bmarker3      = BallMarker(color['RED'])
+bmarker_des3  = BallMarker(color['GREEN'])
+# Marcador para la pata 4
+bmarker4      = BallMarker(color['RED'])
+bmarker_des4  = BallMarker(color['GREEN'])
+
+# Joint names
+jnames = ['FL_HAA', 'FL_HFE', 'FL_KFE', 'FR_HAA', 'FR_HFE', 'FR_KFE', 'HL_HAA', 'HL_HFE', 'HL_KFE', 'HR_HAA', 'HR_HFE', 'HR_KFE']
+
+## Desired position
+# Pata 1
+xd1 = np.array([0.2, 0.2, -0.15])
+# Pata 2
+xd2 = np.array([0.2, -0.2, -0.15])
+# Pata 3
+xd3 = np.array([-0.2, 0.2, -0.15])
+# Pata 4
+xd4 = np.array([-0.2, -0.2, -0.15])
+
+# Initial configuration
+pata1 = 'FL'
+pata2 = 'FR'
+pata3 = 'HL'
+pata4 = 'HR'
+
+# Joint Configuration
+q_fl0 = [0, 0, 0] # Pata izquierda delantera
+q_fr0 = [0, 0, 0]       # Pata derecha delantera
+q_hl0 = [0, 0, 0]       # Pata izquierda trasera
+q_hr0 = [0, 0, 0]       # Pata derecha trasera
+q0 = np.hstack((q_fl0, q_fr0, q_hl0, q_hr0))
+
+# Inverse kinematics
+q_fl = ikine_solo(xd1, q_fl0, pata1)
+q_fr = ikine_solo(xd2, q_fr0, pata2)
+q_hl = ikine_solo(xd3, q_hl0, pata3)
+q_hr = ikine_solo(xd4, q_hr0, pata4)
+
+# Resulting position (end effector with respect to the base link)
+T_bl1, T1 = fkine_solo(q_fl, pata1)
+T_bl2, T2 = fkine_solo(q_fr, pata2)
+T_bl3, T3 = fkine_solo(q_hl, pata3)
+T_bl4, T4 = fkine_solo(q_hr, pata4)
+
+#print('Obtained value:\n', np.round(T_bl,3))
+#print q
+## Pata 1
+# Red marker shows the achieved position
+bmarker1.xyz(T_bl1[0:3,3])
+# Green marker shows the desired position
+bmarker_des1.xyz(xd1)
+
+## Pata 2
+# Red marker shows the achieved position
+bmarker2.xyz(T_bl2[0:3,3])
+# Green marker shows the desired position
+bmarker_des2.xyz(xd2)
+
+## Pata 3
+# Red marker shows the achieved position
+bmarker3.xyz(T_bl3[0:3,3])
+# Green marker shows the desired position
+bmarker_des3.xyz(xd3)
+
+## Pata 4
+# Red marker shows the achieved position
+bmarker4.xyz(T_bl4[0:3,3])
+# Green marker shows the desired position
+bmarker_des4.xyz(xd4)
+
+# Objeto (mensaje) de tipo JointState
+jstate = JointState()
+# Asignar valores al mensaje
+jstate.header.stamp = rospy.Time.now()
+jstate.name = jnames
+q = np.hstack((q_fl, q_fr, q_hl, q_hr))
+jstate.position = q
+
+# Loop rate (in Hz)
+rate = rospy.Rate(100)
+# Continuous execution loop
+while not rospy.is_shutdown():
+    # Current time (needed for ROS)
+    jstate.header.stamp = rospy.Time.now()
+    # Publish the message
+    pub.publish(jstate)
+    # Publicar marcador 1
+    bmarker1.publish()
+    bmarker_des1.publish()
+    # Publicar marcador 2
+    bmarker2.publish()
+    bmarker_des2.publish()
+    # Publicar marcador 3
+    bmarker3.publish()
+    bmarker_des3.publish()
+    # Publicar marcador 4
+    bmarker4.publish()
+    bmarker_des4.publish()
+
+    # Wait for the next iteration
+    rate.sleep()
