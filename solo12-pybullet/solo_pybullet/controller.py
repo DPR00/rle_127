@@ -74,7 +74,7 @@ def c(q, qdot, dt, solo, t_simu, key):
         caminata_mode = 6
     elif key=="q":
         caminata_mode = 0
-    
+    #wenas joven 
     # function defining the feet's trajectory
     def ftraj(t, x0, y0, z0,lado,lado2):  #arguments : time, initial position x and z
         global T, dx, dz, caminata_mode
