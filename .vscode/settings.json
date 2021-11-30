@@ -4,5 +4,11 @@
         "/home/diegopalma/ros_ws/devel/lib/python2.7/dist-packages",
         "/opt/ros/melodic/lib/python2.7/dist-packages",
         "/opt/openrobots/lib/python2.7/site-packages"
+    ],
+    "python.analysis.extraPaths": [
+        "/home/diegopalma/catkin_ws/devel/lib/python2.7/dist-packages",
+        "/home/diegopalma/ros_ws/devel/lib/python2.7/dist-packages",
+        "/opt/ros/melodic/lib/python2.7/dist-packages",
+        "/opt/openrobots/lib/python2.7/site-packages"
     ]
 }

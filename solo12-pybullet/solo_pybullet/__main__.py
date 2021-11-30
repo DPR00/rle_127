@@ -5,10 +5,10 @@
 #####################
 
 import time
-
+import numpy as np
 import pybullet as p  # PyBullet simulator
 
-from .controller import c_walking_ID, c # Controller functions
+from .controller import c_walking_ID, c#, c_walking_IK_bezier # Controller functions
 # Functions to initialize the simulation and retrieve joints positions/velocities
 from .initialization_simulation import configure_simulation, getPosVelJoints
 
@@ -31,7 +31,7 @@ def getKey(key_timeout):
     return key
 
 ##This part of code is just to save the raw telemetry data.
-fieldnames = ["t","FR","FL","BR","BL","torque"]
+fieldnames = ["t","FR","FL","BR","BL","n_FR", "n_FL","n_BR","n_BL"]
 with open('telemetria/data.csv','w') as csv_file:
     csv_writer = csv.DictWriter(csv_file,fieldnames = fieldnames)
     csv_writer.writeheader()
@@ -40,14 +40,21 @@ def update_data():
     #take meassurement from simulation
     t , X = meassure.states()
     U , Ui ,torque = meassure.controls()
-    
+    norm_FR = np.linalg.norm(np.array([Ui[0,0], Ui[1,0], Ui[2,0]]))
+    norm_FL = np.linalg.norm(np.array([Ui[3,0], Ui[4,0], Ui[5,0]]))
+    norm_BR = np.linalg.norm(np.array([Ui[6,0], Ui[7,0], Ui[8,0]]))
+    norm_BL = np.linalg.norm(np.array([Ui[9,0], Ui[10,0], Ui[11,0]]))
     with open('telemetria/data.csv','a') as csv_file:
         csv_writer = csv.DictWriter(csv_file, fieldnames = fieldnames)
         info = {"t" : t[-1],
                 "FR" : Ui[2,0],
                 "FL" : Ui[5,0],
                 "BR" : Ui[8,0],
-                "BL" : Ui[11,0]}
+                "BL" : Ui[11,0],
+                "n_FR": norm_FR,
+                "n_FL": norm_FL,
+                "n_BR": norm_BR,
+                "n_BL": norm_BL}
         csv_writer.writerow(info)
 
 ####################

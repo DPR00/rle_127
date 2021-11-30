@@ -51,7 +51,7 @@ class systemStateEstimator:
         footBL_index = 15   
         index = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
         jointInfo = p.getJointStates(self.boxId ,index)
-        print(jointInfo)
+        #print(jointInfo)
 #        print(jointInfo)
         footPosFR = p.getLinkState(self.boxId ,footFR_index)
         footPosFL = p.getLinkState(self.boxId ,footFL_index)
