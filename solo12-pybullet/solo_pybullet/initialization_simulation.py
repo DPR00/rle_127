@@ -69,6 +69,4 @@ def getPosVelJoints(robotId, revoluteJointIndices):
                    np.array([[jointStates[i_joint][0] for i_joint in range(len(jointStates))]]).transpose()))
     qdot = np.vstack((np.array([baseVel[0]]).transpose(), np.array([baseVel[1]]).transpose(),
                       np.array([[jointStates[i_joint][1] for i_joint in range(len(jointStates))]]).transpose()))
-    #print(q.shape)
-    #print(qdot.shape)
     return q, qdot
