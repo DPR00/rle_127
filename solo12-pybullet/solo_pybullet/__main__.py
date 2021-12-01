@@ -72,13 +72,9 @@ dt = 0.001  # time step of the simulation
 realTimeSimulation = True
 enableGUI = True  # enable PyBullet GUI or not
 robotId, solo, revoluteJointIndices = configure_simulation(dt, enableGUI)
-<<<<<<< HEAD
 
 generar_ladrillos()
 
-=======
-obstacle = p.loadURDF("Models/wedge.urdf", useFixedBase=True)
->>>>>>> 41e394fa993b8720efc9b28ed6c1941c0dfc75b4
 meassure = systemStateEstimator(robotId)
 
 ###############
