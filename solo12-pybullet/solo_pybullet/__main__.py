@@ -8,12 +8,8 @@ import time
 import numpy as np
 import pybullet as p  # PyBullet simulator
 
-<<<<<<< HEAD
 from .controller import c_walking_ID, c#, c_walking_IK_bezier # Controller functions
 from .generate_ladrillos import generar_ladrillos
-=======
-from .controller import c_walking_ID, c, c_simple#, c_walking_IK_bezier # Controller functions
->>>>>>> 41e394fa993b8720efc9b28ed6c1941c0dfc75b4
 # Functions to initialize the simulation and retrieve joints positions/velocities
 from .initialization_simulation import configure_simulation, getPosVelJoints
 
