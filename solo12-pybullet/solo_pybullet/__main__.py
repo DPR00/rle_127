@@ -8,8 +8,12 @@ import time
 import numpy as np
 import pybullet as p  # PyBullet simulator
 
+<<<<<<< HEAD
 from .controller import c_walking_ID, c#, c_walking_IK_bezier # Controller functions
 from .generate_ladrillos import generar_ladrillos
+=======
+from .controller import c_walking_ID, c, c_simple#, c_walking_IK_bezier # Controller functions
+>>>>>>> 41e394fa993b8720efc9b28ed6c1941c0dfc75b4
 # Functions to initialize the simulation and retrieve joints positions/velocities
 from .initialization_simulation import configure_simulation, getPosVelJoints
 
@@ -33,7 +37,7 @@ def getKey(key_timeout):
 
 ##This part of code is just to save the raw telemetry data.
 fieldnames = ["t","FR","FL","BR","BL","n_FR", "n_FL","n_BR","n_BL"]
-with open('telemetria/data.csv','w') as csv_file:
+with open('telemetria/data_prueba.csv','w') as csv_file:
     csv_writer = csv.DictWriter(csv_file,fieldnames = fieldnames)
     csv_writer.writeheader()
 
@@ -45,7 +49,7 @@ def update_data():
     norm_FL = np.linalg.norm(np.array([Ui[3,0], Ui[4,0], Ui[5,0]]))
     norm_BR = np.linalg.norm(np.array([Ui[6,0], Ui[7,0], Ui[8,0]]))
     norm_BL = np.linalg.norm(np.array([Ui[9,0], Ui[10,0], Ui[11,0]]))
-    with open('telemetria/data.csv','a') as csv_file:
+    with open('telemetria/data_prueba.csv','a') as csv_file:
         csv_writer = csv.DictWriter(csv_file, fieldnames = fieldnames)
         info = {"t" : t[-1],
                 "FR" : Ui[2,0],
@@ -68,9 +72,13 @@ dt = 0.001  # time step of the simulation
 realTimeSimulation = True
 enableGUI = True  # enable PyBullet GUI or not
 robotId, solo, revoluteJointIndices = configure_simulation(dt, enableGUI)
+<<<<<<< HEAD
 
 generar_ladrillos()
 
+=======
+obstacle = p.loadURDF("Models/wedge.urdf", useFixedBase=True)
+>>>>>>> 41e394fa993b8720efc9b28ed6c1941c0dfc75b4
 meassure = systemStateEstimator(robotId)
 
 ###############
