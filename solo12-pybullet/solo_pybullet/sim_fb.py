@@ -45,10 +45,10 @@ class systemStateEstimator:
         return self.t , self.X
         
     def controls(self):
-        footFR_index = 3
-        footFL_index = 7
-        footBR_index = 11
-        footBL_index = 15   
+        footFR_index = 7
+        footFL_index = 3
+        footBR_index = 15
+        footBL_index = 11   
         index = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
         jointInfo = p.getJointStates(self.boxId ,index)
         #print(jointInfo)
@@ -57,14 +57,14 @@ class systemStateEstimator:
         footPosFL = p.getLinkState(self.boxId ,footFL_index)
         footPosBR = p.getLinkState(self.boxId ,footBR_index)
         footPosBL = p.getLinkState(self.boxId ,footBL_index)
-        forceFR = np.array(jointInfo[3][2][0:3])
-        forceFL = np.array(jointInfo[7][2][0:3])
-        forceBR = np.array(jointInfo[11][2][0:3])
-        forceBL = np.array(jointInfo[15][2][0:3])
-        torqueFR = np.array([[jointInfo[0][3]],[jointInfo[1][3]],[jointInfo[2][3]]])
-        torqueFL = np.array([[jointInfo[4][3]],[jointInfo[5][3]],[jointInfo[6][3]]])
-        torqueBR = np.array([[jointInfo[8][3]],[jointInfo[9][3]],[jointInfo[10][3]]])
-        torqueBL = np.array([[jointInfo[12][3]],[jointInfo[13][3]],[jointInfo[14][3]]])
+        forceFR = np.array(jointInfo[footFR_index][2][0:3])
+        forceFL = np.array(jointInfo[footFL_index][2][0:3])
+        forceBR = np.array(jointInfo[footBR_index][2][0:3])
+        forceBL = np.array(jointInfo[footBL_index][2][0:3])
+        torqueFR = np.array([[jointInfo[footFR_index-3][3]],[jointInfo[footFR_index-2][3]],[jointInfo[footFR_index-1][3]]])
+        torqueFL = np.array([[jointInfo[footFL_index-3][3]],[jointInfo[footFL_index-2][3]],[jointInfo[footFL_index-1][3]]])
+        torqueBR = np.array([[jointInfo[footBR_index-3][3]],[jointInfo[footBR_index-2][3]],[jointInfo[footBR_index-1][3]]])
+        torqueBL = np.array([[jointInfo[footBL_index-3][3]],[jointInfo[footBL_index-2][3]],[jointInfo[footBL_index-1][3]]])
         
         for i in range(3):
             if (forceFR[i] > 0.):
