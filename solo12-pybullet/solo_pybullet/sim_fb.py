@@ -52,10 +52,6 @@ class systemStateEstimator:
         index = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15]
         jointInfo = p.getJointStates(self.boxId ,index)
         #print(jointInfo)
-<<<<<<< HEAD
-=======
-#        print(jointInfo)
->>>>>>> 4ce47153b4949dc629285f516bcc7ea1a66356d6
         footPosFR = p.getLinkState(self.boxId ,footFR_index)
         footPosFL = p.getLinkState(self.boxId ,footFL_index)
         footPosBR = p.getLinkState(self.boxId ,footBR_index)

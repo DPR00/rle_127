@@ -9,6 +9,7 @@ import numpy as np
 import pybullet as p  # PyBullet simulator
 
 from .controller import c_walking_ID, c#, c_walking_IK_bezier # Controller functions
+from .generate_ladrillos import generar_ladrillos
 # Functions to initialize the simulation and retrieve joints positions/velocities
 from .initialization_simulation import configure_simulation, getPosVelJoints
 
@@ -67,7 +68,9 @@ dt = 0.001  # time step of the simulation
 realTimeSimulation = True
 enableGUI = True  # enable PyBullet GUI or not
 robotId, solo, revoluteJointIndices = configure_simulation(dt, enableGUI)
-obstacle = p.loadURDF("Models/obstacle.urdf", useFixedBase=True)
+
+generar_ladrillos()
+
 meassure = systemStateEstimator(robotId)
 
 ###############
