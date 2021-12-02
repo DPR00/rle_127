@@ -27,21 +27,20 @@ def ftraj_cycloid(t, x0, y0, z0,lado,lado2):
     x = [ ]
     y = [ ]
     z = [ ]
-    if t >= T:
-        t %= T
+    if t >= 2*T:
+        t %= 2*T
     if caminata_mode == 1:
-        th= 2*np.pi*t/T
-        if t <= T / 2:
-            x = [ ]
-            y = [ ]
-            z = [ ]
-            x.append(x0)
-            z.append(z0 + dz)
+        if t <= T:
+            th= 2*np.pi*t/T
+            x.append(x0 + dx*(th-np.sin(th))/(2*np.pi))
+            if t <= T/2:
+                z.append(z0 + 2*dz*(2*th-np.sin(2*th))/(4*np.pi))
+            else:
+                z.append(z0 + 2*(dz- dz*(2*th-np.sin(2*th))/(4*np.pi)))
         else:
-            x = [ ]
-            y = [ ]
-            z = [ ]
-            x.append(x0 - dx)
+            t %= T
+            th= 2*np.pi*t/T
+            x.append(x0 - dx*(th-np.sin(th))/(2*np.pi))
             z.append(0)
         y.append(y0)
     else:
@@ -328,7 +327,7 @@ def c_simple(q, qdot, dt, solo, t_simu, key):
     torques = PD(qa_ref, qa_dot_ref, qa, qa_dot, dt, Kp, Kd, torque_sat, torques_ref)
 
     # torques must be a numpy array of shape (8, 1) containing the torques applied to the 8 motors
-    return torques, torques_ref
+    return torques, torques_ref, xzdes_FL, xzdes_FR, xzdes_HL, xzdes_HR
 
 def c(q, qdot, dt, solo, t_simu, key):
     # unactuated, [x, y, z] position of the base + [x, y, z, w] orientation of the base (stored as a quaternion)
@@ -489,9 +488,9 @@ def c(q, qdot, dt, solo, t_simu, key):
     torques = PD(qa_ref, qa_dot_ref, qa, qa_dot, dt, Kp, Kd, torque_sat, torques_ref)
 
     # torques must be a numpy array of shape (8, 1) containing the torques applied to the 8 motors
-    return torques, torques_ref
+    return torques, torques_ref, xzdes_FL, xzdes_FR, xzdes_HL, xzdes_HR
 
-def c_ciclico(q, qdot, dt, solo, t_simu, key):
+def c_cycloid(q, qdot, dt, solo, t_simu, key):
     # unactuated, [x, y, z] position of the base + [x, y, z, w] orientation of the base (stored as a quaternion)
     # qu = q[:7]
     # actuated, [q1, q2, ..., q8] angular position of the 8 motors
@@ -520,7 +519,7 @@ def c_ciclico(q, qdot, dt, solo, t_simu, key):
 
     #Initialization of the variables
     K = 100.  #Convergence gain
-    T = 0.4  #period of the foot trajectory
+    T = 0.2  #period of the foot trajectory
     xF0 = 0.19  #initial position of the front feet
     xH0 = -0.19  #initial position of the hind feet
     yR0 = -0.147
@@ -565,8 +564,8 @@ def c_ciclico(q, qdot, dt, solo, t_simu, key):
     # Desired foot trajectory
     xzdes_FL = ftraj_cycloid(t_simu, xF0, yL0, z0,"l","f")
     xzdes_HR = ftraj_cycloid(t_simu, xH0, yR0, z0,"r","h")
-    xzdes_FR = ftraj_cycloid(t_simu + T / 2, xF0, yR0, z0,"r","f")
-    xzdes_HL = ftraj_cycloid(t_simu + T / 2, xH0, yL0, z0,"l","h")
+    xzdes_FR = ftraj_cycloid(t_simu + T, xF0, yR0, z0,"r","f")
+    xzdes_HL = ftraj_cycloid(t_simu + T, xH0, yL0, z0,"l","h")
     
     # Calculating the error
     err_FL = xz_FL - xzdes_FL
@@ -650,7 +649,7 @@ def c_ciclico(q, qdot, dt, solo, t_simu, key):
     torques = PD(qa_ref, qa_dot_ref, qa, qa_dot, dt, Kp, Kd, torque_sat, torques_ref)
 
     # torques must be a numpy array of shape (8, 1) containing the torques applied to the 8 motors
-    return torques, torques_ref
+    return torques, torques_ref, xzdes_FL, xzdes_FR, xzdes_HL, xzdes_HR
 
 ########################
 ## WALKING_CONTROLLER ##

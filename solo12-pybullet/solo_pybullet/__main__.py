@@ -8,13 +8,14 @@ import time
 import numpy as np
 import pybullet as p  # PyBullet simulator
 
-from .b_controller import c, c_simple#, c_walking_IK_bezier # Controller functions
+from .b_controller import c, c_cycloid, c_simple#, c_walking_IK_bezier # Controller functions
 # Functions to initialize the simulation and retrieve joints positions/velocities
 from .initialization_simulation import configure_simulation, getPosVelJoints
 
 import sys, select, termios, tty
 from .sim_fb import systemStateEstimator
 import csv
+
 ####################
 ####  FUNCTIONS  ###
 ####################
@@ -37,7 +38,9 @@ fieldnames = ["t","FR","FL","BR","BL","n_FR", "n_FL","n_BR","n_BL",
             "tref_FL_HAA", "tref_FL_HFE", "tref_FL_KFE",
             "tref_FR_HAA", "tref_FR_HFE", "tref_FR_KFE",
             "tref_HL_HAA", "tref_HL_HFE", "tref_HL_KFE",
-            "tref_HR_HAA", "tref_HR_HFE", "tref_HR_KFE"]
+            "tref_HR_HAA", "tref_HR_HFE", "tref_HR_KFE",
+            "x_FR", "y_FR", "z_FR", "x_FL", "y_FL", "z_FL",
+            "x_HR", "y_HR", "z_HR", "x_HL", "y_HL", "z_HL"]
 
 with open('telemetria/data_prueba.csv','w') as csv_file:
     csv_writer = csv.DictWriter(csv_file,fieldnames = fieldnames)
@@ -73,8 +76,11 @@ def update_data(jointTorques, torques_ref):
                 "tref_FL_HAA": tref_FL_HAA, "tref_FL_HFE": tref_FL_HFE, "tref_FL_KFE": tref_FL_KFE,
                 "tref_FR_HAA": tref_FR_HAA, "tref_FR_HFE": tref_FR_HFE, "tref_FR_KFE": tref_FR_KFE,
                 "tref_HL_HAA": tref_HL_HAA, "tref_HL_HFE": tref_HL_HFE, "tref_HL_KFE": tref_HL_KFE,
-                "tref_HR_HAA": tref_HR_HAA, "tref_HR_HFE": tref_HR_HFE, "tref_HR_KFE": tref_HR_KFE
-                }
+                "tref_HR_HAA": tref_HR_HAA, "tref_HR_HFE": tref_HR_HFE, "tref_HR_KFE": tref_HR_KFE,
+                "x_FR": xzdes_FR[0,0], "y_FR": xzdes_FR[1,0], "z_FR": xzdes_FR[2,0],
+                "x_FL": xzdes_FL[0,0], "y_FL": xzdes_FL[1,0], "z_FL": xzdes_FL[2,0],
+                "x_HR": xzdes_HR[0,0], "y_HR": xzdes_HR[1,0], "z_HR": xzdes_HR[2,0],
+                "x_HL": xzdes_HL[0,0], "y_HL": xzdes_HL[1,0], "z_HL": xzdes_HL[2,0]}
         csv_writer.writerow(info)
 
 ####################
@@ -93,6 +99,7 @@ meassure = systemStateEstimator(robotId)
 ###############
 #  MAIN LOOP ##
 ###############
+global xzdes_FL, xzdes_HR, xzdes_FR, xzdes_HL
 
 i=0
 while (1):  # run the simulation during dt * i_max seconds (simulation time)
@@ -107,7 +114,7 @@ while (1):  # run the simulation during dt * i_max seconds (simulation time)
     key_timeout = 0.0005
     key = getKey(key_timeout)
     # Call controller to get torques for all joints
-    jointTorques, torques_ref = c(q, qdot, dt, solo, i * dt,key)
+    jointTorques, torques_ref, xzdes_FL, xzdes_FR, xzdes_HL, xzdes_HR = c_cycloid(q, qdot, dt, solo, i * dt,key)
 
     update_data(jointTorques, torques_ref)
     # Set control torques for all joints in PyBullet

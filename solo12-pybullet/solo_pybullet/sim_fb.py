@@ -103,12 +103,6 @@ class systemStateEstimator:
         return joint_positions, joint_velocities, joint_torques
     
     
-    
-    
-    
-    
-    
-    
     def footJacobian(self , boxId , foot_index):
     
         mpos, mvel, mtorq = self.getMotorJointStates(boxId)
