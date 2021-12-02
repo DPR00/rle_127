@@ -8,10 +8,12 @@ import time
 import numpy as np
 import pybullet as p  # PyBullet simulator
 
-from .controller import c_walking_ID, c#, c_walking_IK_bezier # Controller functions
+from .controller import c_walking_ID, c, c_Bezier#, c_walking_IK_bezier # Controller functions
 from .generate_ladrillos import generar_ladrillos
 # Functions to initialize the simulation and retrieve joints positions/velocities
 from .initialization_simulation import configure_simulation, getPosVelJoints
+from .gaitPlanner import trotGait
+
 
 import sys, select, termios, tty
 from .sim_fb import systemStateEstimator
@@ -69,7 +71,8 @@ realTimeSimulation = True
 enableGUI = True  # enable PyBullet GUI or not
 robotId, solo, revoluteJointIndices = configure_simulation(dt, enableGUI)
 
-generar_ladrillos()
+trot = trotGait() 
+#generar_ladrillos()
 
 meassure = systemStateEstimator(robotId)
 
@@ -90,7 +93,8 @@ while (1):  # run the simulation during dt * i_max seconds (simulation time)
     key_timeout = 0.0005
     key = getKey(key_timeout)
     # Call controller to get torques for all joints
-    jointTorques = c(q, qdot, dt, solo, i * dt,key)
+    jointTorques = c_Bezier(q, qdot, dt, solo, i * dt, key,trot) #
+    #jointTorques = c(q, qdot, dt, solo, i * dt,key)
     #print("Dentro del main ..")
     #print(jointTorques.shape)
     #print(q.shape)
