@@ -59,17 +59,14 @@ def ftraj_simple(t, x0, y0, z0,lado,lado2):  #arguments : time, initial position
         t %= T
     if caminata_mode == 1:
         if t <= T / 2:
-            x = [ ]
-            y = [ ]
-            z = [ ]
-            x.append(x0)
-            z.append(z0 + dz)
+            x.append(x0 + 2*t*dx/T)
+            if t <= T/4:
+                z.append(z0 + 4*dz*t/T)
+            else:
+                z.append(z0 + 2*dz - 4*dz*t/T)
         else:
-            x = [ ]
-            y = [ ]
-            z = [ ]
-            x.append(x0 - dx)
-            z.append(0)
+            x.append(x0 + dx - 2*t*dx/T)
+            z.append(z0)
         y.append(y0)
     else:
         x.append(x0)
@@ -204,7 +201,7 @@ def c_simple(q, qdot, dt, solo, t_simu, key):
     z0 = 0.0  #initial altitude of each foot
     dx = 0.05  #displacement amplitude by x
     dy = 0.03
-    dz = 0.1  #displacement amplitude by z
+    dz = 0.08  #displacement amplitude by z
 
     # Get the frame index of each foot
     ID_FL = solo.model.getFrameId("FL_FOOT")
