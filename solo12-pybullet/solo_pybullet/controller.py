@@ -282,34 +282,6 @@ def c_Bezier(q, qdot, dt, solo, t_simu, key,trot):
     elif key=="q":
         V = 0
 
-    # # function defining the feet's trajectory
-    # def ftraj(t, x0, y0, z0,lado,lado2):  #arguments : time, initial position x and z
-    #     global T, dx, dz, caminata_mode
-    #     x = [ ]
-    #     y = [ ]
-    #     z = [ ]
-    #     if t >= T:
-    #         t %= T
-    #     if caminata_mode == 1:
-    #         if t <= T / 2:
-    #             x = [ ]
-    #             y = [ ]
-    #             z = [ ]
-    #             x.append(x0)
-    #             z.append(z0 + dz)
-    #         else:
-    #             x = [ ]
-    #             y = [ ]
-    #             z = [ ]
-    #             x.append(x0 - dx)
-    #             z.append(0)
-    #         y.append(y0)
-    #     else:
-    #         x.append(x0)
-    #         z.append(z0)
-    #         y.append(y0)
-    #     return np.array([x, y, z])
-
     # Compute/update all the joints and frames
     pin.forwardKinematics(solo.model, solo.data, q_ref)
     pin.updateFramePlacements(solo.model, solo.data)
@@ -321,7 +293,6 @@ def c_Bezier(q, qdot, dt, solo, t_simu, key,trot):
     xz_HL = solo.data.oMf[ID_HL].translation[0:3].reshape((3,1))
     xz_HR = solo.data.oMf[ID_HR].translation[0:3].reshape((3,1))
 
-    print(V)
     bodytoFeet = trot.loop(V , angle , Lrot , T , offset , bodytoFeet0)
 
     # Desired foot trajectory

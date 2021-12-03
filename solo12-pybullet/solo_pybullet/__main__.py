@@ -35,7 +35,7 @@ def getKey(key_timeout):
 
 ##This part of code is just to save the raw telemetry data.
 fieldnames = ["t","FR","FL","BR","BL","n_FR", "n_FL","n_BR","n_BL"]
-with open('telemetria/data_prueba.csv','w') as csv_file:
+with open('telemetria/fuerzas_sin_lad.csv','w') as csv_file:
     csv_writer = csv.DictWriter(csv_file,fieldnames = fieldnames)
     csv_writer.writeheader()
 
@@ -47,7 +47,7 @@ def update_data():
     norm_FL = np.linalg.norm(np.array([Ui[3,0], Ui[4,0], Ui[5,0]]))
     norm_BR = np.linalg.norm(np.array([Ui[6,0], Ui[7,0], Ui[8,0]]))
     norm_BL = np.linalg.norm(np.array([Ui[9,0], Ui[10,0], Ui[11,0]]))
-    with open('telemetria/data_prueba.csv','a') as csv_file:
+    with open('telemetria/fuerzas_sin_lad.csv','a') as csv_file:
         csv_writer = csv.DictWriter(csv_file, fieldnames = fieldnames)
         info = {"t" : t[-1],
                 "FR" : Ui[2,0],
@@ -71,9 +71,9 @@ realTimeSimulation = True
 enableGUI = True  # enable PyBullet GUI or not
 robotId, solo, revoluteJointIndices = configure_simulation(dt, enableGUI)
 
-trot = trotGait() 
-#generar_ladrillos()
-
+#trot = trotGait() 
+generar_ladrillos()
+#obstacle11 = p.loadURDF("Models/wedge.urdf" ,useFixedBase=True)
 meassure = systemStateEstimator(robotId)
 
 ###############
@@ -93,7 +93,7 @@ while (1):  # run the simulation during dt * i_max seconds (simulation time)
     key_timeout = 0.0005
     key = getKey(key_timeout)
     # Call controller to get torques for all joints
-    jointTorques = c_Bezier(q, qdot, dt, solo, i * dt, key,trot) #
+    jointTorques = c(q, qdot, dt, solo, i * dt, key) #
     #jointTorques = c(q, qdot, dt, solo, i * dt,key)
     #print("Dentro del main ..")
     #print(jointTorques.shape)
