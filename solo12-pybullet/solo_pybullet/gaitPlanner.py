@@ -34,7 +34,7 @@ class trotGait:
         s = np.sin(np.deg2rad(angle))
         
         A = 0.001
-        halfL = 0.05
+        halfL = 0.16
         p_stance=halfL*(1-2*phi_st)
         
         stanceX =  c*p_stance*np.abs(V)
@@ -57,16 +57,16 @@ class trotGait:
 ##            print('foot UP', self.s , phi)
             
         
-        X = np.abs(V)*c*np.array([-0.05 ,
-                                  -0.06 ,
-                                  -0.07 , 
+        X = np.abs(V)*c*np.array([-0.397 ,
+                                  -0.318 ,
+                                  -0.2535 , 
+                                  -0.2 ,
                                   -0.1 ,
-                                  0. ,
                                   0. , 
-                                  0.1 ,
-                                  0.07 ,
-                                  0.06 ,
-                                  0.05 ])
+                                  -0.0905 ,
+                                  0.189 ,
+                                  0.218 ,
+                                  0.4015 ])
     
         Y = np.abs(V)*s*np.array([ 0.05 ,
                                    0.06 ,
@@ -80,13 +80,13 @@ class trotGait:
                                    -0.05 ])
     
         Z = np.abs(V)*np.array([0. ,
-                                0. ,
-                                0.05 , 
-                                0.05 ,
-                                0.05 ,
-                                0.06 , 
-                                0.06 ,
-                                0.06 ,
+                                0.2 ,
+                                0.236 , 
+                                0.318 ,
+                                0.359 ,
+                                0.454 , 
+                                0.314 ,
+                                0.403 ,
                                 0. ,
                                 0. ])
         swingX = 0.
