@@ -42,7 +42,7 @@ fieldnames = ["t","FR","FL","BR","BL","n_FR", "n_FL","n_BR","n_BL",
             "x_FR", "y_FR", "z_FR", "x_FL", "y_FL", "z_FL",
             "x_HR", "y_HR", "z_HR", "x_HL", "y_HL", "z_HL"]
 
-with open('telemetria/data_prueba.csv','w') as csv_file:
+with open('telemetria/data_csimple_lad.csv','w') as csv_file:
     csv_writer = csv.DictWriter(csv_file,fieldnames = fieldnames)
     csv_writer.writeheader()
 
@@ -64,7 +64,7 @@ def update_data(jointTorques, torques_ref):
     tref_HL_HAA = torques_ref[6,0]; tref_HL_HFE = torques_ref[7,0]; tref_HL_KFE = torques_ref[8,0]
     tref_HR_HAA = torques_ref[9,0]; tref_HR_HFE = torques_ref[10,0]; tref_HR_KFE = torques_ref[11,0]
 
-    with open('telemetria/data_prueba.csv','a') as csv_file:
+    with open('telemetria/data_csimple_wedge10.csv','a') as csv_file:
         csv_writer = csv.DictWriter(csv_file, fieldnames = fieldnames)
         info = {"t" : t[-1],
                 "FR" : Ui[5,0], "FL" : Ui[2,0], "BR" : Ui[11,0], "BL" : Ui[8,0],
@@ -94,7 +94,7 @@ realTimeSimulation = True
 enableGUI = True  # enable PyBullet GUI or not
 robotId, solo, revoluteJointIndices = configure_simulation(dt, enableGUI)
 #generar_ladrillos()
-#obstacle = p.loadURDF("Models/wedge.urdf", useFixedBase=True)
+obstacle = p.loadURDF("Models/wedge.urdf", useFixedBase=True)
 meassure = systemStateEstimator(robotId)
 
 ###############
@@ -115,7 +115,7 @@ while (1):  # run the simulation during dt * i_max seconds (simulation time)
     key_timeout = 0.0005
     key = getKey(key_timeout)
     # Call controller to get torques for all joints
-    jointTorques, torques_ref, xzdes_FL, xzdes_FR, xzdes_HL, xzdes_HR = c_cycloid(q, qdot, dt, solo, i * dt,key)
+    jointTorques, torques_ref, xzdes_FL, xzdes_FR, xzdes_HL, xzdes_HR = c_simple(q, qdot, dt, solo, i * dt,key)
 
     update_data(jointTorques, torques_ref)
     # Set control torques for all joints in PyBullet

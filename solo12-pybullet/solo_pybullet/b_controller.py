@@ -40,7 +40,7 @@ def ftraj_cycloid(t, x0, y0, z0,lado,lado2):
         else:
             th= 2*np.pi*(t%T)/T
             x.append(x0 + dx - 2*dx*(th-np.sin(th))/(2*np.pi))
-            z.append(0)
+            z.append(0.0)
         y.append(y0)
     else:
         x.append(x0)
