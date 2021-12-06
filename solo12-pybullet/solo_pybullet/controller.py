@@ -239,7 +239,7 @@ def c_Bezier(q, qdot, dt, solo, t_simu, key,trot):
 
     #Initialization of the variables
     K = 100.  #Convergence gain
-    T = 1  #period of the foot trajectory
+    T = 3  #period of the foot trajectory
     xF0 = 0.19  #initial position of the front feet
     xH0 = -0.19  #initial position of the hind feet
     yR0 = -0.147
@@ -251,7 +251,7 @@ def c_Bezier(q, qdot, dt, solo, t_simu, key,trot):
 
     Xdist = 0.38
     Ydist = 0.294
-    height = 0.032
+    height = 0.038
     #body frame to foot frame vector
     bodytoFeet0 = np.matrix([[ Xdist/2 , -Ydist/2 , -height],
                             [ Xdist/2 ,  Ydist/2 , -height],
@@ -268,17 +268,7 @@ def c_Bezier(q, qdot, dt, solo, t_simu, key,trot):
 
 
     if key=="w":
-        V = 0.15
-    elif key=="s":
-        caminata_mode = 2
-    elif key=="d":
-        caminata_mode = 4
-    elif key=="a":
-        caminata_mode = 5
-    elif key=="g":
-        caminata_mode = 3
-    elif key=="f":
-        caminata_mode = 6
+        V = 0.2
     elif key=="q":
         V = 0
 

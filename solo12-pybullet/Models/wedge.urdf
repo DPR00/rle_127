@@ -12,7 +12,7 @@
       <visual>
         <origin rpy="0 0 0" xyz="1.5 0 0"/>
         <geometry>
-              <mesh filename="//home/renzo/Documents/RLE/Codigos/rle_127/solo12-pybullet/Models/wedge.stl" scale="0.5"/>
+              <mesh filename="//home/renzo/Documents/RLE/Codigos/rle_127/solo12-pybullet/Models/wedge2.stl" scale="0.5"/>
         </geometry>
         <material name="green">
         <color rgba="0 1 0 1"/>
@@ -21,7 +21,7 @@
       <collision>
       <origin rpy="0 0 0" xyz="1.5 0 0"/>
           <geometry>
-              <mesh filename="/home/renzo/Documents/RLE/Codigos/rle_127/solo12-pybullet/Models/wedge.stl" scale="0.5"/>
+              <mesh filename="/home/renzo/Documents/RLE/Codigos/rle_127/solo12-pybullet/Models/wedge2.stl" scale="0.5"/>
           </geometry>
       </collision>
     </link>

@@ -33,9 +33,9 @@ def getKey(key_timeout):
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
     return key
 
-##This part of code is just to save the raw telemetry data.
+#This part of code is just to save the raw telemetry data.
 fieldnames = ["t","FR","FL","BR","BL","n_FR", "n_FL","n_BR","n_BL"]
-with open('telemetria/fuerzas_Bezier.csv','w') as csv_file:
+with open('telemetria/fuerzas_Bezier_wedge.csv','w') as csv_file:
     csv_writer = csv.DictWriter(csv_file,fieldnames = fieldnames)
     csv_writer.writeheader()
 
@@ -47,7 +47,7 @@ def update_data():
     norm_FL = np.linalg.norm(np.array([Ui[3,0], Ui[4,0], Ui[5,0]]))
     norm_BR = np.linalg.norm(np.array([Ui[6,0], Ui[7,0], Ui[8,0]]))
     norm_BL = np.linalg.norm(np.array([Ui[9,0], Ui[10,0], Ui[11,0]]))
-    with open('telemetria/fuerzas_Bezier.csv','a') as csv_file:
+    with open('telemetria/fuerzas_Bezier_wedge.csv','a') as csv_file:
         csv_writer = csv.DictWriter(csv_file, fieldnames = fieldnames)
         info = {"t" : t[-1],
                 "FR" : Ui[2,0],
@@ -73,7 +73,7 @@ robotId, solo, revoluteJointIndices = configure_simulation(dt, enableGUI)
 
 trot = trotGait() 
 #generar_ladrillos()
-#obstacle11 = p.loadURDF("Models/wedge.urdf" ,useFixedBase=True)
+obstacle11 = p.loadURDF("Models/wedge.urdf" ,useFixedBase=True)
 meassure = systemStateEstimator(robotId)
 
 ###############
