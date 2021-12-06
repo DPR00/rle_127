@@ -8,10 +8,10 @@ import pybullet as p  # PyBullet simulator
 
 def generar_ladrillos():
 
-    obstacle11 = p.loadURDF("Models/ladrillos.urdf",[0.5, 0.15, 0] ,useFixedBase=True)
-    obstacle12 = p.loadURDF("Models/ladrillos.urdf",[0.5, 0.05, 0.01] ,useFixedBase=True)
+    obstacle11 = p.loadURDF("Models/ladrillos.urdf",[0.5, 0.15, -0.01] ,useFixedBase=True)
+    obstacle12 = p.loadURDF("Models/ladrillos.urdf",[0.5, 0.05, -0.01] ,useFixedBase=True)
     obstacle13 = p.loadURDF("Models/ladrillos.urdf",[0.5, -0.05, -0.01] ,useFixedBase=True)
-    obstacle14 = p.loadURDF("Models/ladrillos.urdf",[0.5, -0.15, 0.015] ,useFixedBase=True)
+    obstacle14 = p.loadURDF("Models/ladrillos.urdf",[0.5, -0.15, -0.015] ,useFixedBase=True)
 
     obstacle21= p.loadURDF("Models/ladrillos.urdf",[0.6, 0.15, -0.01] ,useFixedBase=True)
     obstacle22 = p.loadURDF("Models/ladrillos.urdf",[0.6, 0.05, 0] ,useFixedBase=True)

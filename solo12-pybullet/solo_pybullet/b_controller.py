@@ -32,14 +32,39 @@ def ftraj_cycloid(t, x0, y0, z0,lado,lado2):
     if caminata_mode == 1:
         if t <= T:
             th= 2*np.pi*t/T
-            x.append(x0 + dx*(th-np.sin(th))/(2*np.pi))
+            x.append(x0 - dx + 2*dx*(th-np.sin(th))/(2*np.pi))
             if t <= T/2:
                 z.append(z0 + 2*dz*(2*th-np.sin(2*th))/(4*np.pi))
             else:
                 z.append(z0 + 2*(dz- dz*(2*th-np.sin(2*th))/(4*np.pi)))
         else:
-            t %= T
-            th= 2*np.pi*t/T
+            th= 2*np.pi*(t%T)/T
+            x.append(x0 + dx - 2*dx*(th-np.sin(th))/(2*np.pi))
+            z.append(0)
+        y.append(y0)
+    else:
+        x.append(x0)
+        z.append(z0)
+        y.append(y0)
+    return np.array([x, y, z]) 
+
+def ftraj_cycloid2(t, x0, y0, z0,lado,lado2):
+    global T, dx, dz, caminata_mode
+    
+    x = [ ]
+    y = [ ]
+    z = [ ]
+    if t >= T:
+        t %= T
+    if caminata_mode == 1:
+        th= 2*np.pi*t/T
+        x.append(x0 + dx*(th-np.sin(th))/(2*np.pi))
+        if t <= T/2:
+            if t <= T/2:
+                z.append(z0 + 2*dz*(4*th-np.sin(2*2*th))/(4*np.pi))
+            else:
+                z.append(z0 + 2*(dz- dz*(4*th-np.sin(2*2*th))/(4*np.pi)))
+        else:
             x.append(x0 - dx*(th-np.sin(th))/(2*np.pi))
             z.append(0)
         y.append(y0)
@@ -47,7 +72,7 @@ def ftraj_cycloid(t, x0, y0, z0,lado,lado2):
         x.append(x0)
         z.append(z0)
         y.append(y0)
-    return np.array([x, y, z])   
+    return np.array([x, y, z])    
 
 # function defining the feet's trajectory
 def ftraj_simple(t, x0, y0, z0,lado,lado2):  #arguments : time, initial position x and z
@@ -59,13 +84,13 @@ def ftraj_simple(t, x0, y0, z0,lado,lado2):  #arguments : time, initial position
         t %= T
     if caminata_mode == 1:
         if t <= T / 2:
-            x.append(x0 + 2*t*dx/T)
+            x.append(x0 + 4*t*dx/T - dx) # x.append(x0 + 2*t*dx/T)
             if t <= T/4:
                 z.append(z0 + 4*dz*t/T)
             else:
                 z.append(z0 + 2*dz - 4*dz*t/T)
         else:
-            x.append(x0 + dx - 2*t*dx/T)
+            x.append(x0 + 3*dx - 4*t*dx/T) #x.append(x0 + dx - 2*t*dx/T)
             z.append(z0)
         y.append(y0)
     else:
@@ -201,7 +226,7 @@ def c_simple(q, qdot, dt, solo, t_simu, key):
     z0 = 0.0  #initial altitude of each foot
     dx = 0.05  #displacement amplitude by x
     dy = 0.03
-    dz = 0.08  #displacement amplitude by z
+    dz = 0.12  #displacement amplitude by z
 
     # Get the frame index of each foot
     ID_FL = solo.model.getFrameId("FL_FOOT")
