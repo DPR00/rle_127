@@ -377,7 +377,7 @@ def c_Bezier(q, qdot, dt, solo, t_simu, key,trot):
     torques = PD(qa_ref, qa_dot_ref, qa, qa_dot, dt, Kp, Kd, torque_sat, torques_ref)
 
     # torques must be a numpy array of shape (8, 1) containing the torques applied to the 8 motors
-    return torques
+    return torques, torques_ref, xz_FL, xz_FR, xz_HL, xz_HR
 
 
 def c(q, qdot, dt, solo, t_simu, key):

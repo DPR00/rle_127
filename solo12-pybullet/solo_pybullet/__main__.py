@@ -34,8 +34,16 @@ def getKey(key_timeout):
     return key
 
 #This part of code is just to save the raw telemetry data.
-fieldnames = ["t","FR","FL","BR","BL","n_FR", "n_FL","n_BR","n_BL"]
-with open('telemetria/fuerzas_Bezier_wedge.csv','w') as csv_file:
+fieldnames = ["t","FR","FL","BR","BL","n_FR", "n_FL","n_BR","n_BL",
+            "t_FL_HAA","t_FL_HFE", "t_FL_KFE","t_FR_HAA","t_FR_HFE","t_FR_KFE",
+            "t_HL_HAA","t_HL_HFE","t_HL_KFE", "t_HR_HAA","t_HR_HFE","t_HR_KFE",
+            "tref_FL_HAA", "tref_FL_HFE", "tref_FL_KFE",
+            "tref_FR_HAA", "tref_FR_HFE", "tref_FR_KFE",
+            "tref_HL_HAA", "tref_HL_HFE", "tref_HL_KFE",
+            "tref_HR_HAA", "tref_HR_HFE", "tref_HR_KFE",
+            "x_FR", "y_FR", "z_FR", "x_FL", "y_FL", "z_FL",
+            "x_HR", "y_HR", "z_HR", "x_HL", "y_HL", "z_HL"]
+with open('telemetria/fuerzas_Bezier11.csv','w') as csv_file:
     csv_writer = csv.DictWriter(csv_file,fieldnames = fieldnames)
     csv_writer.writeheader()
 
@@ -47,17 +55,32 @@ def update_data():
     norm_FL = np.linalg.norm(np.array([Ui[3,0], Ui[4,0], Ui[5,0]]))
     norm_BR = np.linalg.norm(np.array([Ui[6,0], Ui[7,0], Ui[8,0]]))
     norm_BL = np.linalg.norm(np.array([Ui[9,0], Ui[10,0], Ui[11,0]]))
-    with open('telemetria/fuerzas_Bezier_wedge.csv','a') as csv_file:
+    torque_FL_HAA = jointTorques[0,0]; torque_FL_HFE = jointTorques[1,0]; torque_FL_KFE = jointTorques[2,0]
+    torque_FR_HAA = jointTorques[3,0]; torque_FR_HFE = jointTorques[4,0]; torque_FR_KFE = jointTorques[5,0]
+    torque_HL_HAA = jointTorques[6,0]; torque_HL_HFE = jointTorques[7,0]; torque_HL_KFE = jointTorques[8,0]
+    torque_HR_HAA = jointTorques[9,0]; torque_HR_HFE = jointTorques[10,0]; torque_HR_KFE = jointTorques[11,0]
+    tref_FL_HAA = torques_ref[0,0]; tref_FL_HFE = torques_ref[1,0]; tref_FL_KFE = torques_ref[2,0]
+    tref_FR_HAA = torques_ref[3,0]; tref_FR_HFE = torques_ref[4,0]; tref_FR_KFE = torques_ref[5,0]
+    tref_HL_HAA = torques_ref[6,0]; tref_HL_HFE = torques_ref[7,0]; tref_HL_KFE = torques_ref[8,0]
+    tref_HR_HAA = torques_ref[9,0]; tref_HR_HFE = torques_ref[10,0]; tref_HR_KFE = torques_ref[11,0]
+
+    with open('telemetria/fuerzas_Bezier11.csv','a') as csv_file:
         csv_writer = csv.DictWriter(csv_file, fieldnames = fieldnames)
         info = {"t" : t[-1],
-                "FR" : Ui[2,0],
-                "FL" : Ui[5,0],
-                "BR" : Ui[8,0],
-                "BL" : Ui[11,0],
-                "n_FR": norm_FR,
-                "n_FL": norm_FL,
-                "n_BR": norm_BR,
-                "n_BL": norm_BL}
+                "FR" : Ui[5,0], "FL" : Ui[2,0], "BR" : Ui[11,0], "BL" : Ui[8,0],
+                "n_FR": norm_FR, "n_FL": norm_FL, "n_BR": norm_BR, "n_BL": norm_BL,
+                "t_FL_HAA": torque_FL_HAA, "t_FL_HFE": torque_FL_HFE, "t_FL_KFE": torque_FL_KFE,
+                "t_FR_HAA": torque_FR_HAA, "t_FR_HFE": torque_FR_HFE, "t_FR_KFE": torque_FR_KFE,
+                "t_HL_HAA": torque_HL_HAA, "t_HL_HFE": torque_HL_HFE, "t_HL_KFE": torque_HL_KFE,
+                "t_HR_HAA": torque_HR_HAA, "t_HR_HFE": torque_HR_HFE, "t_HR_KFE": torque_HR_KFE,
+                "tref_FL_HAA": tref_FL_HAA, "tref_FL_HFE": tref_FL_HFE, "tref_FL_KFE": tref_FL_KFE,
+                "tref_FR_HAA": tref_FR_HAA, "tref_FR_HFE": tref_FR_HFE, "tref_FR_KFE": tref_FR_KFE,
+                "tref_HL_HAA": tref_HL_HAA, "tref_HL_HFE": tref_HL_HFE, "tref_HL_KFE": tref_HL_KFE,
+                "tref_HR_HAA": tref_HR_HAA, "tref_HR_HFE": tref_HR_HFE, "tref_HR_KFE": tref_HR_KFE,
+                "x_FR": xzdes_FR[0,0], "y_FR": xzdes_FR[1,0], "z_FR": xzdes_FR[2,0],
+                "x_FL": xzdes_FL[0,0], "y_FL": xzdes_FL[1,0], "z_FL": xzdes_FL[2,0],
+                "x_HR": xzdes_HR[0,0], "y_HR": xzdes_HR[1,0], "z_HR": xzdes_HR[2,0],
+                "x_HL": xzdes_HL[0,0], "y_HL": xzdes_HL[1,0], "z_HL": xzdes_HL[2,0]}
         csv_writer.writerow(info)
 
 ####################
@@ -72,8 +95,8 @@ enableGUI = True  # enable PyBullet GUI or not
 robotId, solo, revoluteJointIndices = configure_simulation(dt, enableGUI)
 
 trot = trotGait() 
-#generar_ladrillos()
-obstacle11 = p.loadURDF("Models/wedge.urdf" ,useFixedBase=True)
+generar_ladrillos()
+#obstacle11 = p.loadURDF("Models/wedge.urdf" ,useFixedBase=True)
 meassure = systemStateEstimator(robotId)
 
 ###############
@@ -93,7 +116,7 @@ while (1):  # run the simulation during dt * i_max seconds (simulation time)
     key_timeout = 0.0005
     key = getKey(key_timeout)
     # Call controller to get torques for all joints
-    jointTorques = c_Bezier(q, qdot, dt, solo, i * dt, key,trot) #
+    jointTorques, torques_ref, xzdes_FL, xzdes_FR, xzdes_HL, xzdes_HR = c_Bezier(q, qdot, dt, solo, i * dt, key,trot) #
     #jointTorques = c(q, qdot, dt, solo, i * dt,key)
     #print("Dentro del main ..")
     #print(jointTorques.shape)
