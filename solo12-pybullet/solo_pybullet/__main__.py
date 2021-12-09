@@ -43,7 +43,7 @@ fieldnames = ["t","FR","FL","BR","BL","n_FR", "n_FL","n_BR","n_BL",
             "tref_HR_HAA", "tref_HR_HFE", "tref_HR_KFE",
             "x_FR", "y_FR", "z_FR", "x_FL", "y_FL", "z_FL",
             "x_HR", "y_HR", "z_HR", "x_HL", "y_HL", "z_HL"]
-with open('telemetria/fuerzas_Bezier11.csv','w') as csv_file:
+with open('telemetria/fuerzas_sin_wedge10.csv','w') as csv_file:
     csv_writer = csv.DictWriter(csv_file,fieldnames = fieldnames)
     csv_writer.writeheader()
 
@@ -51,10 +51,10 @@ def update_data():
     #take meassurement from simulation
     t , X = meassure.states()
     U , Ui ,torque = meassure.controls()
-    norm_FR = np.linalg.norm(np.array([Ui[0,0], Ui[1,0], Ui[2,0]]))
-    norm_FL = np.linalg.norm(np.array([Ui[3,0], Ui[4,0], Ui[5,0]]))
-    norm_BR = np.linalg.norm(np.array([Ui[6,0], Ui[7,0], Ui[8,0]]))
-    norm_BL = np.linalg.norm(np.array([Ui[9,0], Ui[10,0], Ui[11,0]]))
+    norm_FL = np.linalg.norm(np.array([Ui[0,0], Ui[1,0], Ui[2,0]]))
+    norm_FR = np.linalg.norm(np.array([Ui[3,0], Ui[4,0], Ui[5,0]]))
+    norm_BL = np.linalg.norm(np.array([Ui[6,0], Ui[7,0], Ui[8,0]]))
+    norm_BR = np.linalg.norm(np.array([Ui[9,0], Ui[10,0], Ui[11,0]]))
     torque_FL_HAA = jointTorques[0,0]; torque_FL_HFE = jointTorques[1,0]; torque_FL_KFE = jointTorques[2,0]
     torque_FR_HAA = jointTorques[3,0]; torque_FR_HFE = jointTorques[4,0]; torque_FR_KFE = jointTorques[5,0]
     torque_HL_HAA = jointTorques[6,0]; torque_HL_HFE = jointTorques[7,0]; torque_HL_KFE = jointTorques[8,0]
@@ -64,7 +64,7 @@ def update_data():
     tref_HL_HAA = torques_ref[6,0]; tref_HL_HFE = torques_ref[7,0]; tref_HL_KFE = torques_ref[8,0]
     tref_HR_HAA = torques_ref[9,0]; tref_HR_HFE = torques_ref[10,0]; tref_HR_KFE = torques_ref[11,0]
 
-    with open('telemetria/fuerzas_Bezier11.csv','a') as csv_file:
+    with open('telemetria/fuerzas_sin_wedge10.csv','a') as csv_file:
         csv_writer = csv.DictWriter(csv_file, fieldnames = fieldnames)
         info = {"t" : t[-1],
                 "FR" : Ui[5,0], "FL" : Ui[2,0], "BR" : Ui[11,0], "BL" : Ui[8,0],
@@ -94,9 +94,9 @@ realTimeSimulation = True
 enableGUI = True  # enable PyBullet GUI or not
 robotId, solo, revoluteJointIndices = configure_simulation(dt, enableGUI)
 
-trot = trotGait() 
-generar_ladrillos()
-#obstacle11 = p.loadURDF("Models/wedge.urdf" ,useFixedBase=True)
+#trot = trotGait() 
+#generar_ladrillos()
+obstacle1 = p.loadURDF("Models/wedge.urdf" ,useFixedBase=True)
 meassure = systemStateEstimator(robotId)
 
 ###############
@@ -116,8 +116,8 @@ while (1):  # run the simulation during dt * i_max seconds (simulation time)
     key_timeout = 0.0005
     key = getKey(key_timeout)
     # Call controller to get torques for all joints
-    jointTorques, torques_ref, xzdes_FL, xzdes_FR, xzdes_HL, xzdes_HR = c_Bezier(q, qdot, dt, solo, i * dt, key,trot) #
-    #jointTorques = c(q, qdot, dt, solo, i * dt,key)
+    #jointTorques, torques_ref, xzdes_FL, xzdes_FR, xzdes_HL, xzdes_HR = c_Bezier(q, qdot, dt, solo, i * dt, key,trot) #
+    jointTorques, torques_ref, xzdes_FL, xzdes_FR, xzdes_HL, xzdes_HR = c(q, qdot, dt, solo, i * dt,key)
     #print("Dentro del main ..")
     #print(jointTorques.shape)
     #print(q.shape)
