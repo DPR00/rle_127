@@ -268,7 +268,7 @@ def c_Bezier(q, qdot, dt, solo, t_simu, key,trot):
 
 
     if key=="w":
-        V = 0.2
+        V = 0.25#0.2
     elif key=="q":
         V = 0
 
@@ -377,7 +377,7 @@ def c_Bezier(q, qdot, dt, solo, t_simu, key,trot):
     torques = PD(qa_ref, qa_dot_ref, qa, qa_dot, dt, Kp, Kd, torque_sat, torques_ref)
 
     # torques must be a numpy array of shape (8, 1) containing the torques applied to the 8 motors
-    return torques, torques_ref, xz_FL, xz_FR, xz_HL, xz_HR
+    return torques, torques_ref, xzdes_FL, xzdes_FR, xzdes_HL, xzdes_HR
 
 
 def c(q, qdot, dt, solo, t_simu, key):
@@ -630,7 +630,7 @@ def c(q, qdot, dt, solo, t_simu, key):
     torques = PD(qa_ref, qa_dot_ref, qa, qa_dot, dt, Kp, Kd, torque_sat, torques_ref)
 
     # torques must be a numpy array of shape (8, 1) containing the torques applied to the 8 motors
-    return torques, torques_ref, xz_FL, xz_FR, xz_HL, xz_HR
+    return torques, torques_ref, xzdes_FL, xzdes_FR, xzdes_HL, xzdes_HR
 
 
 ########################

@@ -12,7 +12,7 @@ from .controller import c_walking_ID, c, c_Bezier#, c_walking_IK_bezier # Contro
 from .generate_ladrillos import generar_ladrillos
 # Functions to initialize the simulation and retrieve joints positions/velocities
 from .initialization_simulation import configure_simulation, getPosVelJoints
-from .gaitPlanner import trotGait
+from .gaitPlanner2 import trotGait
 
 
 import sys, select, termios, tty
@@ -33,6 +33,7 @@ def getKey(key_timeout):
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, settings)
     return key
 
+dir='telemetria/a.csv'
 #This part of code is just to save the raw telemetry data.
 fieldnames = ["t","FR","FL","BR","BL","n_FR", "n_FL","n_BR","n_BL",
             "t_FL_HAA","t_FL_HFE", "t_FL_KFE","t_FR_HAA","t_FR_HFE","t_FR_KFE",
@@ -43,7 +44,7 @@ fieldnames = ["t","FR","FL","BR","BL","n_FR", "n_FL","n_BR","n_BL",
             "tref_HR_HAA", "tref_HR_HFE", "tref_HR_KFE",
             "x_FR", "y_FR", "z_FR", "x_FL", "y_FL", "z_FL",
             "x_HR", "y_HR", "z_HR", "x_HL", "y_HL", "z_HL"]
-with open('telemetria/fuerzas_sin_wedge10.csv','w') as csv_file:
+with open(dir,'w') as csv_file:
     csv_writer = csv.DictWriter(csv_file,fieldnames = fieldnames)
     csv_writer.writeheader()
 
@@ -64,7 +65,7 @@ def update_data():
     tref_HL_HAA = torques_ref[6,0]; tref_HL_HFE = torques_ref[7,0]; tref_HL_KFE = torques_ref[8,0]
     tref_HR_HAA = torques_ref[9,0]; tref_HR_HFE = torques_ref[10,0]; tref_HR_KFE = torques_ref[11,0]
 
-    with open('telemetria/fuerzas_sin_wedge10.csv','a') as csv_file:
+    with open(dir,'a') as csv_file:
         csv_writer = csv.DictWriter(csv_file, fieldnames = fieldnames)
         info = {"t" : t[-1],
                 "FR" : Ui[5,0], "FL" : Ui[2,0], "BR" : Ui[11,0], "BL" : Ui[8,0],
@@ -94,9 +95,9 @@ realTimeSimulation = True
 enableGUI = True  # enable PyBullet GUI or not
 robotId, solo, revoluteJointIndices = configure_simulation(dt, enableGUI)
 
-#trot = trotGait() 
+trot = trotGait() 
 #generar_ladrillos()
-obstacle1 = p.loadURDF("Models/wedge.urdf" ,useFixedBase=True)
+#obstacle1 = p.loadURDF("Models/wedge.urdf" ,useFixedBase=True)
 meassure = systemStateEstimator(robotId)
 
 ###############
